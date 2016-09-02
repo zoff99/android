@@ -1,8 +1,8 @@
 machine:
   timezone:
     Europe/Vienna
-  java:
-    version: oraclejdk8
+#  java:
+#    version: oraclejdk8
   environment:
 ###############################
 # run emulator on this API [10,21,23,24]
