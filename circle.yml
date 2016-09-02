@@ -106,9 +106,17 @@ dependencies:
 
     - pwd ; ls -al
 
+
+    - git submodule init
     - git submodule update
+    - android update lib-project -p owncloud-android-library
+    - android update project -p .
+    - android update project -p oc_jb_workaround
+    - android update test-project -p tests -m ..
+
     - ./gradlew lint --info ; exit 0
     - ./gradlew assembleDebug --stacktrace --info --no-daemon
+
 
     - ls -al build/outputs/apk/ ; exit 0
     - find . -name '*.apk' ; exit 0
