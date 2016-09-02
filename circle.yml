@@ -115,6 +115,11 @@ dependencies:
     - android update project -p oc_jb_workaround
     - android update test-project -p tests -m ..
 
+## ------- dirty fix ---------
+    - find . -type f -name '*.java' 2> /dev/null | while read ff ; do echo "$ff" sed -e -i 's#Log_OC.startLogging#// Log_OC.startLogging#g' "$ff" ; done
+    - find . -type f -name '*.java' 2> /dev/null | while read ff ; do echo "$ff" sed -e -i 's#Log_OC.stopLogging#// Log_OC.stopLogging#g' "$ff" ; done
+## ------- dirty fix ---------
+
     - ./gradlew lint --info ; exit 0
     - ./gradlew assembleDebug --stacktrace --info --no-daemon
 
