@@ -106,6 +106,7 @@ dependencies:
 
     - pwd ; ls -al
 
+    - git submodule update
     - ./gradlew lint --info ; exit 0
     - ./gradlew assembleDebug --stacktrace --info --no-daemon
 
