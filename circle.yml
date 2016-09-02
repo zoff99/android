@@ -106,12 +106,7 @@ dependencies:
 
     - pwd ; ls -al
 
-###### custom ######
-    - rm -f ~/.gradle/caches/modules-2/modules-2.lock
-    - sed -i -e 's,textReport .*,textReport true,' app/build.gradle
-###### custom ######
-
-    - ./gradlew lint --info
+    - ./gradlew lint --info ; exit 0
     - ./gradlew assembleDebug --stacktrace --info --no-daemon
 
     - ls -al build/outputs/apk/ ; exit 0
