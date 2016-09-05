@@ -81,6 +81,7 @@ dependencies:
     - android list sdk --all --extended
 
     - echo y | android update sdk --no-ui --all --filter build-tools-22.0.0 > /dev/null 2> /dev/null
+    - echo y | android update sdk --no-ui --all --filter build-tools-22.0.1 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 > /dev/null 2> /dev/null
