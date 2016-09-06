@@ -17,6 +17,7 @@ machine:
     sdpath_24: "/storage/eee"
 #
     EMU_API: "21"
+    EMU_: "appemu21"
 ###############################
 
 ###### custom 2 ######
