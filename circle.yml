@@ -55,64 +55,8 @@ dependencies:
     - echo dummy
 
   pre:
-    - echo '#!/bin/bash' > ~/__sdk_update.sh
-    - echo 'tmpfile="/tmp/sdk_update.$$.txt"
-rm -f "$tmpfile"
-
-function sdk_update_function()
-{
-        echo y | android update sdk --no-ui --all --filter "$1" > "$tmpfile" 2>&1
-        cat "$tmpfile"
-        cat "$tmpfile" | grep -i 'package installed' > /dev/null 2>&1
-        ret_code=$?
-        rm -f "$tmpfile"
-        return $ret_code
-}
-
-if [[ "$1""x" == "build-tools-"* ]]; then
-        num=`echo "$1"|cut -d'-' -f3`
-
-        if [ ! -e "$ANDROID_SDK/build-tools/""$num" ]; then
-                sdk_update_function "$1"
-                exit $?
-        else
-                echo "$1 already installed"
-                exit 0
-        fi
-elif [[ "$1""x" == "sys-img-armeabi-v7a-android-"* ]]; then
-        num=`echo "$1"|awk -F'-' '{print $NF}'`
-
-        if [ ! -e "$ANDROID_SDK/system-images/android-""$num" ]; then
-                sdk_update_function "$1"
-                exit $?
-        else
-                echo "$1 already installed"
-                exit 0
-        fi
-elif [[ "$1""x" == "android-"* ]]; then
-        num=`echo "$1"|awk -F'-' '{print $NF}'`
-
-        if [ ! -e "$ANDROID_SDK/platforms/android-""$num" ]; then
-                sdk_update_function "$1"
-                exit $?
-        else
-                echo "$1 already installed"
-                exit 0
-        fi
-else
-        sdk_update_function "$1"
-        exit $?
-fi
-
-
-echo "Unknown Paramter"
-exit 1
-' >> ~/__sdk_update.sh
-
-    - chmod a+rx ~/__sdk_update.sh
-
-    - ls -al ~/__sdk_update.sh
-    - cat ~/__sdk_update.sh
+    - wget 'https://raw.githubusercontent.com/zoff99/android_sdk_install_wrapper/master/__sdk_update__.sh' -O ~/__sdk_update__.sh
+    - chmod a+rx ~/__sdk_update__.sh
 
     - sudo apt-get update > /dev/null 2> /dev/null
     - sudo apt-get install g++ > /dev/null 2> /dev/null
@@ -140,31 +84,24 @@ exit 1
     - android list sdk --all | grep -i tools
     - android list sdk --all --extended
 
-    - echo y | android update sdk --no-ui --all --filter build-tools-22.0.0 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter build-tools-22.0.1 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter build-tools-24.0.0 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter android-19 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter android-21 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter android-22 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter android-23 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter android-24 > /dev/null 2> /dev/null
+    - ~/__sdk_update__.sh build-tools-22.0.0
+    - ~/__sdk_update__.sh build-tools-22.0.1
+    - ~/__sdk_update__.sh build-tools-23.0.1
+    - ~/__sdk_update__.sh build-tools-23.0.2
+    - ~/__sdk_update__.sh build-tools-23.0.3
+    - ~/__sdk_update__.sh build-tools-24.0.0
+    - ~/__sdk_update__.sh android-19
+    - ~/__sdk_update__.sh android-21
+    - ~/__sdk_update__.sh android-22
+    - ~/__sdk_update__.sh android-23
+    - ~/__sdk_update__.sh android-24
     - echo y | android update sdk --no-ui --all --filter platform-tools > /dev/null 2> /dev/null
-
+    - ~/__sdk_update__.sh sys-img-armeabi-v7a-android-23
+    - ~/__sdk_update__.sh sys-img-armeabi-v7a-android-24
+    - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-addon-google_apis-google-23 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter extra-android-m2repository > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter extra-google-m2repository > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter extra-android-support > /dev/null 2> /dev/null
-
-    # - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services > /dev/null 2> /dev/null
-    # - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services_froyo > /dev/null 2> /dev/null
-    # - echo y | android update sdk --no-ui --all --filter extra-google-gcm > /dev/null 2> /dev/null
-
-    #- echo y | android update sdk --no-ui --all --filter platform-tools-preview > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-23 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-24 > /dev/null 2> /dev/null
-    - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-addon-google_apis-google-23 > /dev/null 2> /dev/null
     - echo y | android update sdk --no-ui --all --filter addon-google_apis-google-23 > /dev/null 2> /dev/null
 
     - if [ "$COVERITY_BUILD_""x" != "0x" ]; then mkdir ~/cov_scan/ && wget https://scan.coverity.com/download/linux-64 --post-data "token=$COVERITY_TOKEN&project=$COV_PROJ" -O ~/cov_scan/coverity_tool.tgz && wget 'http://www.catb.org/~esr/coverity-submit/coverity-submit-1.17.tar.gz' -O ~/cov_scan/coverity-submit.tar.gz && cd ~/cov_scan/ && tar -xzvf coverity_tool.tgz ; fi
